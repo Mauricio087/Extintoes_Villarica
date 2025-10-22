@@ -210,6 +210,7 @@ body {
     height: var(--logo-size);
     object-fit: contain;
     border-radius: var(--border-radius);
+    border: 2px solid var(--color-primary);
 }
 
 .logo-text {
@@ -709,9 +710,13 @@ section {
 /* ===== PRODUCTOS ===== */
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--spacing-xl);
     margin-top: var(--spacing-2xl);
+}
+
+.product-card:nth-child(7) {
+    grid-column: 2;
 }
 
 .product-card {
@@ -794,6 +799,36 @@ section {
 }
 
 /* ===== CONTACTO ===== */
+.contact {
+    background-image: url('../img/local.jpeg');
+    background-size:auto;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+}
+
+.contact::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 100%);
+    z-index: 1;
+}
+
+.contact .container {
+    position: relative;
+    z-index: 2;
+}
+
+.contact .section-title,
+.contact .section-subtitle {
+    color: var(--color-white);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
 .contact-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -806,6 +841,11 @@ section {
     align-items: flex-start;
     gap: var(--spacing-lg);
     margin-bottom: var(--spacing-xl);
+    background: rgba(255, 255, 255, 0.95);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius-lg);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 .contact-icon {
@@ -836,9 +876,11 @@ section {
 }
 
 .contact-form {
-    background-color: var(--color-gray-100);
+    background: rgba(255, 255, 255, 0.95);
     padding: var(--spacing-2xl);
     border-radius: var(--border-radius-lg);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 .contact-form h3 {
@@ -1269,6 +1311,16 @@ section {
         gap: var(--spacing-xl);
     }
     
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .product-card:nth-child(7) {
+        grid-column: 1 / -1;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    
     .social-links {
         flex-direction: column;
         align-items: center;
@@ -1352,6 +1404,10 @@ section {
     .services-grid,
     .products-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .product-card:nth-child(7) {
+        grid-column: 1;
     }
     
     /* Carrusel de servicios en móvil */
