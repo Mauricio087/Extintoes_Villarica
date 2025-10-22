@@ -5,6 +5,7 @@
 let isMenuOpen = false;
 let scrollUpButton;
 let whatsappButton;
+let lastScrollTop = 0;
 
 // ===== INICIALIZACIÓN DEL SITIO =====
 document.addEventListener('DOMContentLoaded', function() {
@@ -12,11 +13,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Inicializar todas las funcionalidades
     initNavbar();
+    initNavbarHideOnScroll();
     initHeroSection();
     initScrollEffects();
     initFloatingButtons();
     initSmoothScrolling();
     initServicesCarousel();
+    initProductButtons();
     
     console.log('🚀 Sitio web inicializado correctamente');
 });
@@ -90,6 +93,37 @@ function initNavbar() {
     });
     
     console.log('📱 Navbar inicializado correctamente');
+}
+
+// ===== FUNCIONALIDAD PARA OCULTAR NAVBAR AL HACER SCROLL =====
+function initNavbarHideOnScroll() {
+    const header = document.querySelector('.header');
+    
+    if (!header) return;
+    
+    window.addEventListener('scroll', function() {
+        const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // Si estamos en la parte superior de la página, siempre mostrar el navbar
+        if (currentScrollTop <= 0) {
+            header.classList.remove('hidden');
+            lastScrollTop = currentScrollTop;
+            return;
+        }
+        
+        // Si scrolleamos hacia abajo, ocultar el navbar
+        if (currentScrollTop > lastScrollTop && currentScrollTop > 100) {
+            header.classList.add('hidden');
+        }
+        // Si scrolleamos hacia arriba, mostrar el navbar
+        else if (currentScrollTop < lastScrollTop) {
+            header.classList.remove('hidden');
+        }
+        
+        lastScrollTop = currentScrollTop;
+    });
+    
+    console.log('📱 Funcionalidad de ocultar navbar al hacer scroll inicializada');
 }
 
 // ===== FUNCIONALIDADES DE LA HERO SECTION =====
@@ -253,7 +287,7 @@ function initServicesCarousel() {
         if (slideIndex >= totalSlides) slideIndex = 0;
         
         currentSlide = slideIndex;
-        const translateX = -slideIndex * 25; // 25% por cada slide
+        const translateX = -slideIndex * 25; // Cada slide se mueve 25% (100% / 4 cards)
         track.style.transform = `translateX(${translateX}%)`;
         
         // Actualizar indicadores
@@ -361,6 +395,27 @@ function initServicesCarousel() {
     startAutoSlide();
     
     console.log('🎠 Carrusel de servicios inicializado correctamente');
+}
+
+// ===== FUNCIONALIDAD BOTONES DE PRODUCTOS =====
+function initProductButtons() {
+    const productButtons = document.querySelectorAll('.whatsapp-btn');
+    
+    productButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const productName = this.getAttribute('data-product');
+            const message = `Hola! Me interesa obtener más información sobre: ${productName}`;
+            const phoneNumber = businessData.phones[0].replace(/\+/g, ''); // Usar el primer teléfono
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            
+            // Abrir WhatsApp en una nueva ventana
+            window.open(whatsappUrl, '_blank');
+            
+            console.log(`📱 Redirigiendo a WhatsApp para: ${productName}`);
+        });
+    });
+    
+    console.log('📱 Botones de productos inicializados correctamente');
 }
 
 // ===== UTILIDADES GENERALES =====

@@ -52,9 +52,6 @@
                         <a href="#productos" class="nav-link">Productos</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#galeria" class="nav-link">Galería</a>
-                    </li>
-                    <li class="nav-item">
                         <a href="#contacto" class="nav-link">Contacto</a>
                     </li>
                 </ul>
@@ -121,56 +118,48 @@
                 <div class="carousel-container">
                     <div class="carousel-track" id="services-track">
                         <!-- Card 1: Venta -->
-                        <div class="service-card">
+                        <div class="service-card" style="background-image: url('assets/img/venta_de_extintores.jpeg');">
+                            <div class="card-overlay"></div>
                             <h3 class="card-title">Venta de Extintores</h3>
                             <div class="card-body">
                                 <div class="card-text">
                                     <p class="card-description">Ofrecemos una amplia gama de extintores PQS de diferentes capacidades, certificados y de las mejores marcas del mercado.</p>
-                                </div>
-                                <div class="card-image-container">
-                                    <img src="assets/img/venta_de_extintores.jpeg" alt="Venta de Extintores" class="card-image" onerror="this.src='assets/img/placeholder-service.jpg'">
                                 </div>
                             </div>
                             <a href="https://api.whatsapp.com/send?phone=56991864681&text=Hola,%20me%20interesa%20conocer%20más%20sobre%20la%20venta%20de%20extintores." class="btn btn-primary">Cotizar Ahora</a>
                         </div>
 
                         <!-- Card 2: Mantención -->
-                        <div class="service-card">
+                        <div class="service-card" style="background-image: url('assets/img/mantencion.jpeg');">
+                            <div class="card-overlay"></div>
                             <h3 class="card-title">Mantención</h3>
                             <div class="card-body">
                                 <div class="card-text">
                                     <p class="card-description">Servicio técnico especializado para mantener tus extintores en óptimas condiciones y cumplir con las normativas vigentes.</p>
-                                </div>
-                                <div class="card-image-container">
-                                    <img src="assets/img/mantencion.jpeg" alt="Mantención de Extintores" class="card-image" onerror="this.src='assets/img/placeholder-service.jpg'">
                                 </div>
                             </div>
                             <a href="https://api.whatsapp.com/send?phone=56991864681&text=Hola,%20necesito%20información%20sobre%20el%20servicio%20de%20mantención%20de%20extintores." class="btn btn-primary">Solicitar Servicio</a>
                         </div>
 
                         <!-- Card 3: Recarga -->
-                        <div class="service-card">
+                        <div class="service-card" style="background-image: url('assets/img/recarga_de_extintores.jpeg');">
+                            <div class="card-overlay"></div>
                             <h3 class="card-title">Recarga de Extintores PQS</h3>
                             <div class="card-body">
                                 <div class="card-text">
                                     <p class="card-description">Recarga profesional de extintores PQS con polvo químico seco de alta calidad, garantizando su efectividad.</p>
-                                </div>
-                                <div class="card-image-container">
-                                    <img src="assets/img/servicios/recarga.jpg" alt="Recarga de Extintores PQS" class="card-image" onerror="this.src='assets/img/placeholder-service.jpg'">
                                 </div>
                             </div>
                             <a href="https://api.whatsapp.com/send?phone=56991864681&text=Hola,%20necesito%20recargar%20mis%20extintores%20PQS." class="btn btn-primary">Solicitar Recarga</a>
                         </div>
 
                         <!-- Card 4: Visitas a Terreno -->
-                        <div class="service-card">
+                        <div class="service-card" style="background-image: url('assets/img/visita_en_terreno.jpeg');">
+                            <div class="card-overlay"></div>
                             <h3 class="card-title">Visitas a Terreno</h3>
                             <div class="card-body">
                                 <div class="card-text">
                                     <p class="card-description">Nos desplazamos hasta tu ubicación para realizar evaluaciones, mantenciones y servicios in situ para tu comodidad.</p>
-                                </div>
-                                <div class="card-image-container">
-                                    <img src="assets/img/visita_en_terreno.jpeg" alt="Visitas a Terreno" class="card-image" onerror="this.src='assets/img/placeholder-service.jpg'">
                                 </div>
                             </div>
                             <a href="https://api.whatsapp.com/send?phone=56991864681&text=Hola,%20me%20interesa%20agendar%20una%20visita%20a%20terreno." class="btn btn-primary">Agendar Visita</a>
@@ -206,34 +195,94 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Nuestros Productos</h2>
-                <p class="section-subtitle">Extintores PQS (Polvo Químico Seco) - Clase A, B, C</p>
+                <p class="section-subtitle">Ofrecemos una amplia gama de extintores y equipos de seguridad contra incendios de la más alta calidad. Cada producto está certificado y diseñado para brindar la máxima protección en diferentes tipos de emergencias.</p>
             </div>
             
-            <!-- Los productos se renderizarán dinámicamente con JavaScript -->
+            <!-- Grid de productos -->
             <div class="products-grid" id="products-container">
-                <!-- Contenido generado por JavaScript -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Sección Galería -->
-    <section class="gallery" id="galeria">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Galería</h2>
-                <p class="section-subtitle">Conoce nuestro trabajo y instalaciones</p>
-            </div>
-            
-            <!-- Carrusel de imágenes -->
-            <div class="swiper gallery-swiper">
-                <div class="swiper-wrapper" id="gallery-container">
-                    <!-- Slides generados dinámicamente por JavaScript -->
+                <!-- Producto 1 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="assets/img/producto_1.jpeg" alt="Producto 1">
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-title">Título del Producto 1</h3>
+                        <p class="product-description">Descripción del producto que será proporcionada posteriormente.</p>
+                        <button class="product-btn whatsapp-btn" data-product="Producto 1">Me interesa</button>
+                    </div>
                 </div>
-                
-                <!-- Controles del carrusel -->
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-pagination"></div>
+
+                <!-- Producto 2 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="assets/img/extintor_2kg_CO2.jpeg" alt="Producto 2">
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-title">Título del Producto 2</h3>
+                        <p class="product-description">Descripción del producto que será proporcionada posteriormente.</p>
+                        <button class="product-btn whatsapp-btn" data-product="Producto 2">Me interesa</button>
+                    </div>
+                </div>
+
+                <!-- Producto 3 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="assets/img/extintor_4kg.jpeg" alt="Producto 3">
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-title">Título del Producto 3</h3>
+                        <p class="product-description">Descripción del producto que será proporcionada posteriormente.</p>
+                        <button class="product-btn whatsapp-btn" data-product="Producto 3">Me interesa</button>
+                    </div>
+                </div>
+
+                <!-- Producto 4 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="assets/img/extintor_6kg.jpeg" alt="Producto 4">
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-title">Título del Producto 4</h3>
+                        <p class="product-description">Descripción del producto que será proporcionada posteriormente.</p>
+                        <button class="product-btn whatsapp-btn" data-product="Producto 4">Me interesa</button>
+                    </div>
+                </div>
+
+                <!-- Producto 5 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="assets/img/extintor_10kg.jpeg" alt="Producto 5">
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-title">Título del Producto 5</h3>
+                        <p class="product-description">Descripción del producto que será proporcionada posteriormente.</p>
+                        <button class="product-btn whatsapp-btn" data-product="Producto 5">Me interesa</button>
+                    </div>
+                </div>
+
+                <!-- Producto 6 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="assets/img/gabinete.jpeg" alt="Producto 6">
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-title">Título del Producto 6</h3>
+                        <p class="product-description">Descripción del producto que será proporcionada posteriormente.</p>
+                        <button class="product-btn whatsapp-btn" data-product="Producto 6">Me interesa</button>
+                    </div>
+                </div>
+
+                <!-- Producto 7 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="assets/img/señal_etica.jpeg" alt="Producto 7">
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-title">Título del Producto 7</h3>
+                        <p class="product-description">Descripción del producto que será proporcionada posteriormente.</p>
+                        <button class="product-btn whatsapp-btn" data-product="Producto 7">Me interesa</button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -412,16 +461,7 @@
         </button>
     </div>
 
-    <!-- Modal para galería -->
-    <div class="modal" id="gallery-modal">
-        <div class="modal-content">
-            <span class="modal-close" id="modal-close">&times;</span>
-            <img class="modal-image" id="modal-image" src="" alt="">
-        </div>
-    </div>
-
     <!-- JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="./assets/js/main.js"></script>
 </body>
 </html>
