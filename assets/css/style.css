@@ -1553,3 +1553,106 @@ section {
         padding: var(--spacing-md);
     }
 }
+
+/* ===== ANIMACIONES DE FONDO PROFESIONALES ===== */
+
+/* Animación de gradiente para sección Quiénes Somos */
+@keyframes gradientAbout {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Animación de gradiente para sección Nuestros Productos */
+@keyframes gradientProducts {
+    0% {
+        background-position: 0% 0%;
+    }
+    25% {
+        background-position: 100% 0%;
+    }
+    50% {
+        background-position: 100% 100%;
+    }
+    75% {
+        background-position: 0% 100%;
+    }
+    100% {
+        background-position: 0% 0%;
+    }
+}
+
+/* Fondo animado para sección Quiénes Somos */
+.about {
+    background: linear-gradient(-45deg, 
+        var(--color-primary), 
+        var(--color-primary-dark), 
+        var(--color-secondary), 
+        var(--color-primary-light)
+    );
+    background-size: 400% 400%;
+    animation: gradientAbout 15s ease infinite;
+    position: relative;
+}
+
+.about::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+
+.about .container {
+    position: relative;
+    z-index: 2;
+}
+
+/* Fondo animado para sección Nuestros Productos */
+.products {
+    background: linear-gradient(45deg, 
+        var(--color-secondary), 
+        var(--color-primary), 
+        var(--color-accent), 
+        var(--color-primary-dark),
+        var(--color-gray-800)
+    );
+    background-size: 300% 300%;
+    animation: gradientProducts 20s ease infinite;
+    position: relative;
+}
+
+.products::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.15);
+    z-index: 1;
+}
+
+.products .container {
+    position: relative;
+    z-index: 2;
+}
+
+/* Asegurar que los textos sean legibles sobre los fondos animados */
+.about .section-title,
+.about .section-subtitle,
+.about p,
+.products .section-title,
+.products .section-subtitle {
+    color: var(--color-white);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
