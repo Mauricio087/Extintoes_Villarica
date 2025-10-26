@@ -226,9 +226,9 @@ function initFloatingButtons() {
     
     // Configurar enlace de WhatsApp con mensaje personalizado
     if (whatsappButton) {
-        const phoneNumber = '56991864681'; // Número principal
-        const message = encodeURIComponent('¡Hola! Me interesa conocer más sobre sus servicios de extintores. ¿Podrían brindarme información?');
-        const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+        const phoneNumber = '56993811272'; // Número principal
+        const message = encodeURIComponent('Hola, me interesa conocer más sobre sus servicios.');
+        const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${message}`;
         
         whatsappButton.href = whatsappUrl;
         whatsappButton.target = '_blank';
@@ -446,7 +446,7 @@ window.addEventListener('error', function(e) {
 const businessData = {
     name: 'Extintores Villarrica',
     address: 'Colo Colo 1410, Villarrica',
-    phones: ['+56991864681', '+56993811272'],
+    phones: ['+56993811272', '+56991864681'],
     schedule: {
         morning: '9:30 - 14:00 hrs',
         afternoon: '16:30 - 19:00 hrs',
