@@ -1655,6 +1655,12 @@ section {
     .footer-links a {
         text-align: center;
     }
+
+    /* Centrar líneas rojas bajo títulos del footer en móvil */
+    .footer-section h3::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
 }
 
 /* Mobile pequeño */
