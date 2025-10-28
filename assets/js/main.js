@@ -288,11 +288,24 @@ function initServicesCarousel() {
         
         currentSlide = slideIndex;
         const translateX = -slideIndex * 25; // Cada slide se mueve 25% (100% / 4 cards)
+        
+        // Añadir clase de transición para efectos más suaves
         track.style.transform = `translateX(${translateX}%)`;
         
-        // Actualizar indicadores
+        // Actualizar indicadores con animación
         indicators.forEach((indicator, index) => {
             indicator.classList.toggle('active', index === currentSlide);
+        });
+        
+        // Añadir efecto de escala temporal a las tarjetas visibles
+        const cards = track.querySelectorAll('.service-card');
+        cards.forEach((card, index) => {
+            if (index === currentSlide) {
+                card.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    card.style.transform = '';
+                }, 300);
+            }
         });
     }
     
@@ -308,7 +321,14 @@ function initServicesCarousel() {
     
     // Función para iniciar el auto-slide
     function startAutoSlide() {
-        autoSlideInterval = setInterval(nextSlide, 5000); // Cambiar cada 5 segundos
+        autoSlideInterval = setInterval(() => {
+            // Añadir efecto de fade antes del cambio
+            track.style.opacity = '0.95';
+            setTimeout(() => {
+                nextSlide();
+                track.style.opacity = '1';
+            }, 100);
+        }, 5000); // Cambiar cada 5 segundos
     }
     
     // Función para detener el auto-slide
