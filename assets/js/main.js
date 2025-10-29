@@ -318,7 +318,7 @@ function initServicesCarousel() {
         autoSlideInterval = setInterval(() => {
             console.log('⏭️ Auto-slide: moviendo al siguiente slide');
             nextSlide();
-        }, 2000); // Cambiar cada 2 segundos
+        }, 7000); // Cambiar cada 7 segundos
         console.log('▶️ Auto-slide iniciado');
     }
 
