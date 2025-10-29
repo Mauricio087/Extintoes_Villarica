@@ -1546,6 +1546,19 @@ section {
     .carousel-btn {
         width: 35px;
         height: 35px;
+        background-color: transparent;
+        color: rgba(255, 255, 255, 0.7);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+    }
+
+    .carousel-btn:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.9);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: translateY(-50%) scale(1.1);
+        box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
     }
 
     .carousel-btn svg {
