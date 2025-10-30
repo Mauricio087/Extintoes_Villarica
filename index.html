@@ -15,9 +15,6 @@
     
     <!-- CSS -->
     <link rel="stylesheet" href="./assets/css/style.css">
-    
-    <!-- Swiper CSS para la galería -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 </head>
 <body>
     <!-- Header / Navbar -->
@@ -53,6 +50,9 @@
                     </li>
                     <li class="nav-item">
                         <a href="#productos" class="nav-link">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#galeria" class="nav-link">Galería</a>
                     </li>
                     <li class="nav-item">
                         <a href="#contacto" class="nav-link">Contacto</a>
@@ -121,7 +121,7 @@
             <div class="certification-content" style="text-align: center; margin-top: 2rem;">
                 <div class="certification-text">
                     <p style="margin-bottom: 2rem; font-size: 1.1rem; line-height: 1.8; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">
-                        La certificación de empresas que trabajan con extintores está regulada por el <strong>Decreto Supremo N°44</strong> del Ministerio de Economía, Fomento y Turismo. Este decreto exige que los servicios de revisión, mantenimiento, recarga y prueba hidrostática de extintores estén certificados por organismos acreditados ante el <strong>Instituto Nacional de Normalización (INN)</strong>. La norma es obligatoria desde <strong>2020</strong> y aplica a todas las organizaciones, tanto públicas como privadas. En este caso, la empresa <strong>WSS</strong> es la encargada de otorgar la certificación.
+                        La certificación de empresas que trabajan con extintores está regulada por el <strong>Decreto Supremo N°44</strong> del Ministerio de Economía, Fomento y Turismo. Este decreto exige que los servicios de revisión, mantenimiento, recarga y prueba hidrostática de extintores estén certificados por organismos acreditados ante el <strong>Instituto Nacional de Normalización (INN)</strong>. La norma es obligatoria desde <strong>2020</strong> y aplica a todas las organizaciones, tanto públicas como privadas. En este caso, la empresa <strong>Word Survey Services S.A.(WSS)</strong>, es la encargada de otorgar la certificación.
                     </p>
 
                     <h3 style="color: var(--color-accent); margin: 2rem 0 1rem 0; font-size: 1.5rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">Nuestras Certificaciones</h3>
@@ -161,7 +161,7 @@
                             <h3 class="card-title">Venta de Extintores</h3>
                             <div class="card-body">
                                 <div class="card-text">
-                                    <p class="card-description">Existen diferentes clases de extintores pero nosotros ofrecemos, extintores multi propósitos de polvo químico seco (PQS). Y también de dióxido de carbono (CO2).</p>
+                                    <p class="card-description">Existen diferentes clases de extintores, nosotros ofrecemos extintores multi propósitos de polvo químico seco (PQS) y también de dióxido de carbono (CO2).</p>
                                 </div>
                             </div>
                             <a href="https://api.whatsapp.com/send?phone=56993811272&text=Hola,%20me%20interesa%20conocer%20más%20sobre%20la%20venta%20de%20extintores." class="btn btn-primary">Cotizar Ahora</a>
@@ -173,7 +173,7 @@
                             <h3 class="card-title">Mantención</h3>
                             <div class="card-body">
                                 <div class="card-text">
-                                    <p class="card-description">La mantención de extintores, según el Decreto Supremo N°44, consiste en un examen detallado de sus partes mecánicas, agente extinguidor y sistema de expulsión, y debe realizarse al menos una vez al año.</p>
+                                    <p class="card-description">La mantención de extintores, según la Norma Chilena NCH 2050- 2019, consiste en un examen detallado de sus partes mecánicas, agente extinguidor y sistema de expulsión, y debe realizarse al menos una vez al año.</p>
                                 </div>
                             </div>
                             <a href="https://api.whatsapp.com/send?phone=56993811272&text=Hola,%20necesito%20información%20sobre%20el%20servicio%20de%20mantención%20de%20extintores." class="btn btn-primary">Solicitar Servicio</a>
@@ -325,6 +325,61 @@
             </div>
         </div>
     </section>
+
+    <!-- Gallery Section - Carrusel con modal -->
+    <section id="galeria" class="gallery" role="region" aria-labelledby="gallery-heading">
+        <div class="container">
+            <!-- Encabezado de la sección -->
+            <div class="section-header">
+                <h2 id="gallery-heading">Galería de Trabajos</h2>
+                <div class="section-divider" role="presentation"></div>
+                <p>Algunos de nuestros proyectos realizados</p>
+            </div>
+
+            <!-- Contenedor principal del carrusel -->
+            <div class="gallery-carousel">
+                <!-- Contenedor donde se cargan dinámicamente las imágenes -->
+                <div class="gallery-container" id="galleryContainer">
+                    <!-- Las imágenes se cargarán dinámicamente con JavaScript -->
+                </div>
+
+                <!-- Controles de navegación del carrusel -->
+                <div class="gallery-controls">
+                    <button class="gallery-btn gallery-prev" id="galleryPrev">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="gallery-btn gallery-next" id="galleryNext">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                
+                <!-- Indicadores de posición del carrusel -->
+                <div class="gallery-indicators" id="galleryIndicators">
+                    <!-- Los indicadores se generarán dinámicamente -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal para visualización ampliada de imágenes -->
+    <div id="galleryModal" class="gallery-modal">
+        <div class="modal-content">
+            <!-- Botón para cerrar el modal -->
+            <span class="modal-close" id="modalClose">&times;</span>
+            <!-- Imagen principal del modal -->
+            <img id="modalImage" src="" alt="">
+            <!-- Navegación dentro del modal -->
+            <div class="modal-nav">
+                <button class="modal-btn modal-prev" id="modalPrev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="modal-btn modal-next" id="modalNext">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Sección Contacto -->
     <section class="contact" id="contacto">

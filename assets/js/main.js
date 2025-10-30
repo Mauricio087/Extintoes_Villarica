@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initSmoothScrolling();
     initServicesCarousel();
     initProductButtons();
+    initGallery(); // Inicializar galería
 
     console.log('🚀 Sitio web inicializado correctamente');
 });
@@ -488,3 +489,372 @@ const businessData = {
 };
 
 console.log('🏢 Datos del negocio cargados:', businessData);
+
+// ===== GALERÍA FUNCTIONALITY =====
+
+// Configuración de la galería
+const galleryConfig = {
+    totalImages: 14, // Total de imágenes disponibles
+    imagesPerView: 4, // Imágenes visibles por defecto
+    imagePath: 'assets/img/galeria/', // Ruta de las imágenes
+    imageExtension: '.jpeg', // Extensión de las imágenes
+    autoAdvanceInterval: 4000 // Intervalo para avance automático (4 segundos)
+};
+
+// Variables globales de la galería
+let currentIndex = 0;
+let modalCurrentIndex = 0;
+let autoAdvanceTimer = null; // Timer para avance automático
+let isUserInteracting = false; // Flag para pausar auto-avance durante interacción
+
+// Función para inicializar la galería
+function initGallery() {
+    console.log('🖼️ Inicializando galería...');
+    
+    // Generar las imágenes dinámicamente
+    generateGalleryImages();
+    
+    // Configurar controles del carrusel
+    setupCarouselControls();
+    
+    // Configurar indicadores
+    setupIndicators();
+    
+    // Configurar modal
+    setupModal();
+    
+    // Configurar eventos de click en las imágenes
+    setupImageClickEvents();
+    
+    // Configurar navegación con teclado
+    setupKeyboardNavigation();
+    
+    // Actualizar vista inicial
+    updateCarousel();
+    
+    // Inicializar avance automático
+    startAutoAdvance();
+    
+    console.log('✅ Galería inicializada correctamente');
+}
+
+// Función para generar las imágenes de la galería dinámicamente
+function generateGalleryImages() {
+    const container = document.querySelector('.gallery-container');
+    if (!container) return;
+    
+    // Limpiar contenedor
+    container.innerHTML = '';
+    
+    // Generar cada imagen
+    for (let i = 1; i <= galleryConfig.totalImages; i++) {
+        const galleryItem = document.createElement('div');
+        galleryItem.className = 'gallery-item';
+        galleryItem.dataset.index = i - 1; // Índice basado en 0
+        
+        galleryItem.innerHTML = `
+            <img src="${galleryConfig.imagePath}${i}${galleryConfig.imageExtension}" 
+                 alt="Imagen de galería ${i}" 
+                 loading="lazy">
+            <div class="gallery-overlay">
+                <i class="fas fa-search-plus"></i>
+            </div>
+        `;
+        
+        container.appendChild(galleryItem);
+    }
+}
+
+// Función para configurar los controles del carrusel
+function setupCarouselControls() {
+    const prevBtn = document.querySelector('.gallery-btn.prev');
+    const nextBtn = document.querySelector('.gallery-btn.next');
+    const galleryContainer = document.querySelector('.gallery-container');
+    
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            isUserInteracting = true;
+            navigateCarousel('prev');
+            resetAutoAdvance();
+            setTimeout(() => { isUserInteracting = false; }, 100);
+        });
+    }
+    
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            isUserInteracting = true;
+            navigateCarousel('next');
+            resetAutoAdvance();
+            setTimeout(() => { isUserInteracting = false; }, 100);
+        });
+    }
+    
+    // Pausar avance automático en hover
+    if (galleryContainer) {
+        galleryContainer.addEventListener('mouseenter', () => {
+            isUserInteracting = true;
+            stopAutoAdvance();
+        });
+        
+        galleryContainer.addEventListener('mouseleave', () => {
+            isUserInteracting = false;
+            startAutoAdvance();
+        });
+    }
+}
+
+// Función para configurar los indicadores
+function setupIndicators() {
+    const indicatorsContainer = document.querySelector('.gallery-indicators');
+    if (!indicatorsContainer) return;
+    
+    // Limpiar indicadores existentes
+    indicatorsContainer.innerHTML = '';
+    
+    // Calcular número de páginas
+    const totalPages = Math.ceil(galleryConfig.totalImages / galleryConfig.imagesPerView);
+    
+    // Crear indicadores
+    for (let i = 0; i < totalPages; i++) {
+        const indicator = document.createElement('div');
+        indicator.className = 'gallery-indicator';
+        if (i === 0) indicator.classList.add('active');
+        
+        indicator.addEventListener('click', () => {
+            isUserInteracting = true;
+            currentIndex = i;
+            updateCarousel();
+            updateIndicators();
+            resetAutoAdvance();
+            setTimeout(() => { isUserInteracting = false; }, 100);
+        });
+        
+        indicatorsContainer.appendChild(indicator);
+    }
+}
+
+// Función para configurar el modal
+function setupModal() {
+    const modal = document.querySelector('.gallery-modal');
+    const closeBtn = document.querySelector('.modal-close');
+    const prevModalBtn = document.querySelector('.modal-btn.prev');
+    const nextModalBtn = document.querySelector('.modal-btn.next');
+    
+    // Cerrar modal
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeModal);
+    }
+    
+    // Cerrar modal al hacer click fuera de la imagen
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+    }
+    
+    // Navegación en el modal
+    if (prevModalBtn) {
+        prevModalBtn.addEventListener('click', () => {
+            navigateModal('prev');
+        });
+    }
+    
+    if (nextModalBtn) {
+        nextModalBtn.addEventListener('click', () => {
+            navigateModal('next');
+        });
+    }
+}
+
+// Función para configurar eventos de click en las imágenes
+function setupImageClickEvents() {
+    document.addEventListener('click', (e) => {
+        const galleryItem = e.target.closest('.gallery-item');
+        if (galleryItem) {
+            const imageIndex = parseInt(galleryItem.dataset.index);
+            openModal(imageIndex);
+        }
+    });
+}
+
+// Función para configurar navegación con teclado
+function setupKeyboardNavigation() {
+    document.addEventListener('keydown', (e) => {
+        const modal = document.querySelector('.gallery-modal');
+        if (modal && modal.classList.contains('active')) {
+            switch (e.key) {
+                case 'Escape':
+                    closeModal();
+                    break;
+                case 'ArrowLeft':
+                    navigateModal('prev');
+                    break;
+                case 'ArrowRight':
+                    navigateModal('next');
+                    break;
+            }
+        }
+    });
+}
+
+// Función para navegar en el carrusel
+function navigateCarousel(direction) {
+    const totalPages = Math.ceil(galleryConfig.totalImages / galleryConfig.imagesPerView);
+    
+    if (direction === 'next') {
+        currentIndex = (currentIndex + 1) % totalPages;
+    } else {
+        currentIndex = (currentIndex - 1 + totalPages) % totalPages;
+    }
+    
+    updateCarousel();
+    updateIndicators();
+}
+
+// Función para actualizar la vista del carrusel
+function updateCarousel() {
+    const container = document.querySelector('.gallery-container');
+    if (!container) return;
+    
+    // Calcular desplazamiento
+    const itemWidth = 100 / galleryConfig.imagesPerView;
+    const offset = currentIndex * itemWidth * galleryConfig.imagesPerView;
+    
+    container.style.transform = `translateX(-${offset}%)`;
+    
+    // Actualizar estado de los botones
+    updateCarouselButtons();
+}
+
+// Función para actualizar los botones del carrusel
+function updateCarouselButtons() {
+    const prevBtn = document.querySelector('.gallery-btn.prev');
+    const nextBtn = document.querySelector('.gallery-btn.next');
+    const totalPages = Math.ceil(galleryConfig.totalImages / galleryConfig.imagesPerView);
+    
+    if (prevBtn) {
+        prevBtn.disabled = currentIndex === 0;
+    }
+    
+    if (nextBtn) {
+        nextBtn.disabled = currentIndex === totalPages - 1;
+    }
+}
+
+// Función para actualizar los indicadores
+function updateIndicators() {
+    const indicators = document.querySelectorAll('.gallery-indicator');
+    indicators.forEach((indicator, index) => {
+        indicator.classList.toggle('active', index === currentIndex);
+    });
+}
+
+// Función para abrir el modal
+function openModal(imageIndex) {
+    const modal = document.querySelector('.gallery-modal');
+    const modalImage = document.querySelector('#modalImage');
+    
+    if (!modal || !modalImage) return;
+    
+    modalCurrentIndex = imageIndex;
+    
+    // Actualizar imagen del modal
+    const imageNumber = imageIndex + 1;
+    modalImage.src = `${galleryConfig.imagePath}${imageNumber}${galleryConfig.imageExtension}`;
+    modalImage.alt = `Imagen de galería ${imageNumber}`;
+    
+    // Mostrar modal
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Prevenir scroll
+}
+
+// Función para cerrar el modal
+function closeModal() {
+    const modal = document.querySelector('.gallery-modal');
+    if (!modal) return;
+    
+    modal.classList.remove('active');
+    document.body.style.overflow = ''; // Restaurar scroll
+}
+
+// Función para navegar en el modal
+function navigateModal(direction) {
+    if (direction === 'next') {
+        modalCurrentIndex = (modalCurrentIndex + 1) % galleryConfig.totalImages;
+    } else {
+        modalCurrentIndex = (modalCurrentIndex - 1 + galleryConfig.totalImages) % galleryConfig.totalImages;
+    }
+    
+    // Actualizar imagen del modal
+    const modalImage = document.querySelector('#modalImage');
+    if (modalImage) {
+        const imageNumber = modalCurrentIndex + 1;
+        modalImage.src = `${galleryConfig.imagePath}${imageNumber}${galleryConfig.imageExtension}`;
+        modalImage.alt = `Imagen de galería ${imageNumber}`;
+    }
+}
+
+// Funciones de avance automático
+function startAutoAdvance() {
+    if (autoAdvanceTimer) {
+        clearInterval(autoAdvanceTimer);
+    }
+    
+    autoAdvanceTimer = setInterval(() => {
+        if (!isUserInteracting) {
+            navigateCarousel('next');
+        }
+    }, galleryConfig.autoAdvanceInterval);
+}
+
+function stopAutoAdvance() {
+    if (autoAdvanceTimer) {
+        clearInterval(autoAdvanceTimer);
+        autoAdvanceTimer = null;
+    }
+}
+
+function resetAutoAdvance() {
+    stopAutoAdvance();
+    setTimeout(() => {
+        if (!isUserInteracting) {
+            startAutoAdvance();
+        }
+    }, 1000); // Esperar 1 segundo antes de reiniciar
+}
+
+// Función debounce para optimizar el rendimiento
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Configurar responsive behavior
+const handleResize = debounce(() => {
+    const isMobile = window.innerWidth <= 768;
+    galleryConfig.imagesPerView = isMobile ? 2 : 4;
+    
+    // Reconfigurar indicadores
+    setupIndicators();
+    
+    // Resetear índice si es necesario
+    const totalPages = Math.ceil(galleryConfig.totalImages / galleryConfig.imagesPerView);
+    if (currentIndex >= totalPages) {
+        currentIndex = totalPages - 1;
+    }
+    
+    updateCarousel();
+    updateIndicators();
+}, 250);
+
+// Escuchar cambios de tamaño de ventana
+window.addEventListener('resize', handleResize);
