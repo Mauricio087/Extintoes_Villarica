@@ -1888,7 +1888,7 @@ section {
     height: 250px;
     overflow: hidden;
     cursor: pointer;
-    background: var(--color-gray-200);
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(251, 191, 36, 0.1) 100%);
     display: flex;
     align-items: center;
     justify-content: center;

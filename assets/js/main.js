@@ -493,7 +493,7 @@ console.log('🏢 Datos del negocio cargados:', businessData);
 // ===== GALERÍA =====
 // Configuración de la galería
 const galleryConfig = {
-    totalImages: 14, // Número total de imágenes en la carpeta
+    totalImages: 3, // Número total de imágenes en la carpeta
     imagePath: 'assets/img/galeria/', // Ruta base de las imágenes
     imageExtension: '.jpeg', // Extensión de las imágenes
     autoAdvanceInterval: 5000, // Intervalo de avance automático en ms
