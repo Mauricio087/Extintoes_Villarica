@@ -24,14 +24,14 @@ La galería es un componente interactivo que muestra imagenes de una seecion de 
             <div class="section-divider" role="presentation"></div>
             <p>Algunos de nuestros proyectos realizados</p>
         </div>
-    
+
         <!-- Contenedor principal del carrusel -->
         <div class="gallery-carousel">
             <!-- Contenedor donde se cargan dinámicamente las imágenes -->
             <div class="gallery-container" id="galleryContainer">
                 <!-- Las imágenes se cargarán dinámicamente con JavaScript -->
             </div>
-            
+
             <!-- Controles de navegación del carrusel -->
             <div class="gallery-controls">
                 <button class="gallery-btn gallery-prev" id="galleryPrev">
@@ -41,7 +41,7 @@ La galería es un componente interactivo que muestra imagenes de una seecion de 
                     <i class="fas fa-chevron-right"></i>
                 </button>
             </div>
-            
+
             <!-- Indicadores de posición del carrusel -->
             <div class="gallery-indicators" id="galleryIndicators">
                 <!-- Los indicadores se generarán dinámicamente -->
@@ -287,7 +287,7 @@ function initGallery() {
     // CONFIGURACIÓN PRINCIPAL
     const TOTAL_IMAGES = 29; // Número total de imágenes en la carpeta galeria
     const AUTO_ADVANCE_INTERVAL = 4000; // Tiempo para avance automático (4 segundos)
-    
+
     // Elementos DOM principales
     const galleryContainer = document.querySelector('.gallery-container');
     const modal = document.getElementById('galleryModal');
@@ -298,7 +298,7 @@ function initGallery() {
     const prevCarouselBtn = document.querySelector('.gallery-prev');
     const nextCarouselBtn = document.querySelector('.gallery-next');
     const indicators = document.querySelector('.gallery-indicators');
-    
+
     // Variables de estado
     let currentCarouselIndex = 0; // Índice actual del carrusel
     let currentModalIndex = 0; // Índice actual del modal
@@ -306,7 +306,7 @@ function initGallery() {
     let totalSlides = Math.ceil(TOTAL_IMAGES / imagesPerView); // Total de slides
     let autoAdvanceTimer = null; // Timer para avance automático
     let isUserInteracting = false; // Flag para pausar auto-avance
-    
+
     /**
      * Determina cuántas imágenes mostrar según el tamaño de pantalla
      * @returns {number} Número de imágenes por vista
@@ -326,11 +326,11 @@ function initGallery() {
      */
     function generateGalleryImages() {
         galleryContainer.innerHTML = ''; // Limpia contenedor
-        
+
         // Calcula qué imágenes mostrar en el slide actual
         const startIndex = currentCarouselIndex * imagesPerView;
         const endIndex = Math.min(startIndex + imagesPerView, TOTAL_IMAGES);
-        
+
         // Crea elementos para cada imagen
         for (let i = startIndex; i < endIndex; i++) {
             const imageNumber = i + 1;
@@ -342,23 +342,23 @@ function initGallery() {
                     <i class="fas fa-search-plus"></i>
                 </div>
             `;
-            
+
             // Asigna evento click para abrir modal
             galleryItem.addEventListener('click', () => {
                 openModal(i);
             });
-            
+
             galleryContainer.appendChild(galleryItem);
         }
     }
-    
+
     /**
      * Genera los indicadores del carrusel
      * Crea puntos que muestran la posición actual
      */
     function generateIndicators() {
         if (!indicators) return;
-        
+
         indicators.innerHTML = '';
         for (let i = 0; i < totalSlides; i++) {
             const indicator = document.createElement('span');
@@ -376,14 +376,14 @@ function initGallery() {
      */
     function updateCarousel() {
         generateGalleryImages();
-        
+
         // Actualiza estado de indicadores
         const allIndicators = document.querySelectorAll('.gallery-indicator');
         allIndicators.forEach((indicator, index) => {
             indicator.classList.toggle('active', index === currentCarouselIndex);
         });
     }
-    
+
     /**
      * Navega a un slide específico
      * @param {number} index - Índice del slide destino
@@ -392,9 +392,9 @@ function initGallery() {
         currentCarouselIndex = index;
         updateCarousel();
     }
-    
+
     // FUNCIONES DE AVANCE AUTOMÁTICO
-    
+
     /**
      * Inicia el avance automático del carrusel
      */
@@ -408,7 +408,7 @@ function initGallery() {
             }
         }, AUTO_ADVANCE_INTERVAL);
     }
-    
+
     /**
      * Detiene el avance automático
      */
@@ -418,7 +418,7 @@ function initGallery() {
             autoAdvanceTimer = null;
         }
     }
-    
+
     /**
      * Reinicia el avance automático después de interacción
      */
@@ -430,9 +430,9 @@ function initGallery() {
             }
         }, 1000); // Espera 1 segundo antes de reanudar
     }
-    
+
     // NAVEGACIÓN DEL CARRUSEL
-    
+
     /**
      * Avanza al siguiente slide
      */
@@ -440,7 +440,7 @@ function initGallery() {
         currentCarouselIndex = (currentCarouselIndex + 1) % totalSlides;
         updateCarousel();
     }
-    
+
     /**
      * Retrocede al slide anterior
      */
@@ -450,7 +450,7 @@ function initGallery() {
     }
 
     // FUNCIONES DEL MODAL
-    
+
     /**
      * Abre el modal con una imagen específica
      * @param {number} imageIndex - Índice de la imagen a mostrar
@@ -462,7 +462,7 @@ function initGallery() {
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden'; // Previene scroll del body
     }
-    
+
     /**
      * Cierra el modal
      */
@@ -470,7 +470,7 @@ function initGallery() {
         modal.style.display = 'none';
         document.body.style.overflow = 'auto'; // Restaura scroll del body
     }
-    
+
     /**
      * Navega a la siguiente imagen en el modal
      */
@@ -479,7 +479,7 @@ function initGallery() {
         modalImg.src = `./assets/img/galeria/${currentModalIndex + 1}.jpg`;
         modalImg.alt = `Proyecto ${currentModalIndex + 1}`;
     }
-    
+
     /**
      * Navega a la imagen anterior en el modal
      */
@@ -488,9 +488,9 @@ function initGallery() {
         modalImg.src = `./assets/img/galeria/${currentModalIndex + 1}.jpg`;
         modalImg.alt = `Proyecto ${currentModalIndex + 1}`;
     }
-    
+
     // EVENT LISTENERS DEL CARRUSEL
-    
+
     // Botón siguiente con control de auto-avance
     if (nextCarouselBtn) {
         nextCarouselBtn.addEventListener('click', () => {

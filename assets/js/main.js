@@ -490,162 +490,175 @@ const businessData = {
 
 console.log('🏢 Datos del negocio cargados:', businessData);
 
-// ===== GALERÍA FUNCTIONALITY =====
-
+// ===== GALERÍA =====
 // Configuración de la galería
 const galleryConfig = {
-    totalImages: 14, // Total de imágenes disponibles
-    imagesPerView: 4, // Imágenes visibles por defecto
-    imagePath: 'assets/img/galeria/', // Ruta de las imágenes
+    totalImages: 14, // Número total de imágenes en la carpeta
+    imagePath: 'assets/img/galeria/', // Ruta base de las imágenes
     imageExtension: '.jpeg', // Extensión de las imágenes
-    autoAdvanceInterval: 4000 // Intervalo para avance automático (4 segundos)
+    autoAdvanceInterval: 5000, // Intervalo de avance automático en ms
+    transitionDuration: 500 // Duración de la transición en ms
 };
 
 // Variables globales de la galería
 let currentIndex = 0;
 let modalCurrentIndex = 0;
-let autoAdvanceTimer = null; // Timer para avance automático
-let isUserInteracting = false; // Flag para pausar auto-avance durante interacción
+let autoAdvanceTimer = null;
+let isUserInteracting = false;
 
-// Función para inicializar la galería
+// Función principal para inicializar la galería
 function initGallery() {
     console.log('🖼️ Inicializando galería...');
     
-    // Generar las imágenes dinámicamente
-    generateGalleryImages();
-    
-    // Configurar controles del carrusel
-    setupCarouselControls();
-    
-    // Configurar indicadores
-    setupIndicators();
-    
-    // Configurar modal
-    setupModal();
-    
-    // Configurar eventos de click en las imágenes
-    setupImageClickEvents();
-    
-    // Configurar navegación con teclado
-    setupKeyboardNavigation();
-    
-    // Actualizar vista inicial
-    updateCarousel();
-    
-    // Inicializar avance automático
-    startAutoAdvance();
-    
-    console.log('✅ Galería inicializada correctamente');
+    try {
+        generateGalleryImages();
+        setupCarouselControls();
+        setupIndicators();
+        setupModal();
+        setupImageClickEvents();
+        setupKeyboardNavigation();
+        updateCarousel();
+        startAutoAdvance();
+        
+        console.log('✅ Galería inicializada correctamente');
+    } catch (error) {
+        console.error('❌ Error al inicializar la galería:', error);
+    }
 }
 
-// Función para generar las imágenes de la galería dinámicamente
+// Generar imágenes dinámicamente
 function generateGalleryImages() {
-    const container = document.querySelector('.gallery-container');
-    if (!container) return;
-    
-    // Limpiar contenedor
+    const container = document.getElementById('galleryContainer');
+    if (!container) {
+        console.error('❌ Contenedor de galería no encontrado');
+        return;
+    }
+
     container.innerHTML = '';
-    
-    // Generar cada imagen
+
     for (let i = 1; i <= galleryConfig.totalImages; i++) {
         const galleryItem = document.createElement('div');
         galleryItem.className = 'gallery-item';
-        galleryItem.dataset.index = i - 1; // Índice basado en 0
-        
-        galleryItem.innerHTML = `
-            <img src="${galleryConfig.imagePath}${i}${galleryConfig.imageExtension}" 
-                 alt="Imagen de galería ${i}" 
-                 loading="lazy">
-            <div class="gallery-overlay">
-                <i class="fas fa-search-plus"></i>
-            </div>
-        `;
-        
+        galleryItem.setAttribute('data-index', i - 1);
+
+        const img = document.createElement('img');
+        img.src = `${galleryConfig.imagePath}${i}${galleryConfig.imageExtension}`;
+        img.alt = `Imagen de galería ${i}`;
+        img.loading = 'lazy';
+
+        // Agregar clase de carga
+        img.classList.add('loading');
+
+        // Manejar carga exitosa
+        img.onload = function() {
+            this.classList.remove('loading');
+            this.classList.add('loaded');
+        };
+
+        // Manejar errores de carga de imagen
+        img.onerror = function() {
+            console.warn(`⚠️ No se pudo cargar la imagen: ${this.src}`);
+            this.classList.remove('loading');
+            this.classList.add('error');
+            this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlbiBubyBkaXNwb25pYmxlPC90ZXh0Pjwvc3ZnPg==';
+            this.alt = 'Imagen no disponible';
+        };
+
+        const overlay = document.createElement('div');
+        overlay.className = 'gallery-overlay';
+        overlay.innerHTML = '<i class="fas fa-search-plus"></i>';
+
+        galleryItem.appendChild(img);
+        galleryItem.appendChild(overlay);
         container.appendChild(galleryItem);
     }
+
+    console.log(`📸 Generadas ${galleryConfig.totalImages} imágenes de galería`);
+    
+    // Verificar que todas las imágenes se generaron correctamente
+    const generatedItems = container.querySelectorAll('.gallery-item');
+    console.log(`✅ Items generados: ${generatedItems.length}/${galleryConfig.totalImages}`);
+    
+    // Verificar el ancho del contenedor
+    console.log(`📏 Ancho del contenedor: ${container.style.width || 'auto'}`);
 }
 
-// Función para configurar los controles del carrusel
+// Configurar controles del carrusel
 function setupCarouselControls() {
-    const prevBtn = document.querySelector('.gallery-btn.prev');
-    const nextBtn = document.querySelector('.gallery-btn.next');
-    const galleryContainer = document.querySelector('.gallery-container');
-    
-    if (prevBtn) {
+    const prevBtn = document.getElementById('galleryPrev');
+    const nextBtn = document.getElementById('galleryNext');
+
+    if (prevBtn && nextBtn) {
         prevBtn.addEventListener('click', () => {
-            isUserInteracting = true;
-            navigateCarousel('prev');
-            resetAutoAdvance();
-            setTimeout(() => { isUserInteracting = false; }, 100);
-        });
-    }
-    
-    if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
-            isUserInteracting = true;
-            navigateCarousel('next');
-            resetAutoAdvance();
-            setTimeout(() => { isUserInteracting = false; }, 100);
-        });
-    }
-    
-    // Pausar avance automático en hover
-    if (galleryContainer) {
-        galleryContainer.addEventListener('mouseenter', () => {
-            isUserInteracting = true;
             stopAutoAdvance();
+            previousImage();
+            resetAutoAdvance();
         });
-        
-        galleryContainer.addEventListener('mouseleave', () => {
-            isUserInteracting = false;
-            startAutoAdvance();
+
+        nextBtn.addEventListener('click', () => {
+            stopAutoAdvance();
+            nextImage();
+            resetAutoAdvance();
         });
+
+        console.log('🎮 Controles del carrusel configurados');
     }
 }
 
-// Función para configurar los indicadores
+// Configurar indicadores
 function setupIndicators() {
-    const indicatorsContainer = document.querySelector('.gallery-indicators');
+    const indicatorsContainer = document.getElementById('galleryIndicators');
     if (!indicatorsContainer) return;
-    
-    // Limpiar indicadores existentes
+
     indicatorsContainer.innerHTML = '';
-    
-    // Calcular número de páginas
-    const totalPages = Math.ceil(galleryConfig.totalImages / galleryConfig.imagesPerView);
-    
-    // Crear indicadores
-    for (let i = 0; i < totalPages; i++) {
+
+    for (let i = 0; i < galleryConfig.totalImages; i++) {
         const indicator = document.createElement('div');
         indicator.className = 'gallery-indicator';
-        if (i === 0) indicator.classList.add('active');
+        indicator.setAttribute('data-index', i);
         
+        if (i === 0) {
+            indicator.classList.add('active');
+        }
+
         indicator.addEventListener('click', () => {
-            isUserInteracting = true;
-            currentIndex = i;
-            updateCarousel();
-            updateIndicators();
+            stopAutoAdvance();
+            goToImage(i);
             resetAutoAdvance();
-            setTimeout(() => { isUserInteracting = false; }, 100);
         });
-        
+
         indicatorsContainer.appendChild(indicator);
     }
+
+    console.log(`🔘 Generados ${galleryConfig.totalImages} indicadores`);
 }
 
-// Función para configurar el modal
+// Configurar modal
 function setupModal() {
-    const modal = document.querySelector('.gallery-modal');
-    const closeBtn = document.querySelector('.modal-close');
-    const prevModalBtn = document.querySelector('.modal-btn.prev');
-    const nextModalBtn = document.querySelector('.modal-btn.next');
-    
-    // Cerrar modal
-    if (closeBtn) {
-        closeBtn.addEventListener('click', closeModal);
+    const modal = document.getElementById('galleryModal');
+    const modalClose = document.getElementById('modalClose');
+    const modalPrev = document.getElementById('modalPrev');
+    const modalNext = document.getElementById('modalNext');
+
+    if (modalClose) {
+        modalClose.addEventListener('click', closeModal);
     }
-    
-    // Cerrar modal al hacer click fuera de la imagen
+
+    if (modalPrev) {
+        modalPrev.addEventListener('click', () => {
+            modalCurrentIndex = (modalCurrentIndex - 1 + galleryConfig.totalImages) % galleryConfig.totalImages;
+            updateModalImage();
+        });
+    }
+
+    if (modalNext) {
+        modalNext.addEventListener('click', () => {
+            modalCurrentIndex = (modalCurrentIndex + 1) % galleryConfig.totalImages;
+            updateModalImage();
+        });
+    }
+
+    // Cerrar modal al hacer clic fuera de la imagen
     if (modal) {
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
@@ -653,208 +666,193 @@ function setupModal() {
             }
         });
     }
-    
-    // Navegación en el modal
-    if (prevModalBtn) {
-        prevModalBtn.addEventListener('click', () => {
-            navigateModal('prev');
-        });
-    }
-    
-    if (nextModalBtn) {
-        nextModalBtn.addEventListener('click', () => {
-            navigateModal('next');
-        });
-    }
+
+    console.log('🖼️ Modal configurado');
 }
 
-// Función para configurar eventos de click en las imágenes
+// Configurar eventos de clic en imágenes
 function setupImageClickEvents() {
-    document.addEventListener('click', (e) => {
+    const container = document.getElementById('galleryContainer');
+    if (!container) return;
+
+    container.addEventListener('click', (e) => {
         const galleryItem = e.target.closest('.gallery-item');
         if (galleryItem) {
-            const imageIndex = parseInt(galleryItem.dataset.index);
-            openModal(imageIndex);
+            const index = parseInt(galleryItem.getAttribute('data-index'));
+            openModal(index);
         }
     });
+
+    console.log('👆 Eventos de clic en imágenes configurados');
 }
 
-// Función para configurar navegación con teclado
+// Configurar navegación por teclado
 function setupKeyboardNavigation() {
     document.addEventListener('keydown', (e) => {
-        const modal = document.querySelector('.gallery-modal');
-        if (modal && modal.classList.contains('active')) {
+        const modal = document.getElementById('galleryModal');
+        const isModalOpen = modal && modal.classList.contains('active');
+
+        if (isModalOpen) {
             switch (e.key) {
                 case 'Escape':
                     closeModal();
                     break;
                 case 'ArrowLeft':
-                    navigateModal('prev');
+                    e.preventDefault();
+                    modalCurrentIndex = (modalCurrentIndex - 1 + galleryConfig.totalImages) % galleryConfig.totalImages;
+                    updateModalImage();
                     break;
                 case 'ArrowRight':
-                    navigateModal('next');
+                    e.preventDefault();
+                    modalCurrentIndex = (modalCurrentIndex + 1) % galleryConfig.totalImages;
+                    updateModalImage();
+                    break;
+            }
+        } else {
+            // Navegación en el carrusel principal
+            switch (e.key) {
+                case 'ArrowLeft':
+                    if (e.target.closest('.gallery')) {
+                        e.preventDefault();
+                        stopAutoAdvance();
+                        previousImage();
+                        resetAutoAdvance();
+                    }
+                    break;
+                case 'ArrowRight':
+                    if (e.target.closest('.gallery')) {
+                        e.preventDefault();
+                        stopAutoAdvance();
+                        nextImage();
+                        resetAutoAdvance();
+                    }
                     break;
             }
         }
     });
+
+    console.log('⌨️ Navegación por teclado configurada');
 }
 
-// Función para navegar en el carrusel
-function navigateCarousel(direction) {
-    const totalPages = Math.ceil(galleryConfig.totalImages / galleryConfig.imagesPerView);
-    
-    if (direction === 'next') {
-        currentIndex = (currentIndex + 1) % totalPages;
-    } else {
-        currentIndex = (currentIndex - 1 + totalPages) % totalPages;
-    }
-    
+// Funciones de navegación
+function nextImage() {
+    currentIndex = (currentIndex + 1) % galleryConfig.totalImages;
     updateCarousel();
-    updateIndicators();
 }
 
-// Función para actualizar la vista del carrusel
+function previousImage() {
+    currentIndex = (currentIndex - 1 + galleryConfig.totalImages) % galleryConfig.totalImages;
+    updateCarousel();
+}
+
+function goToImage(index) {
+    currentIndex = index;
+    updateCarousel();
+}
+
+// Actualizar carrusel
 function updateCarousel() {
-    const container = document.querySelector('.gallery-container');
-    if (!container) return;
-    
-    // Calcular desplazamiento
-    const itemWidth = 100 / galleryConfig.imagesPerView;
-    const offset = currentIndex * itemWidth * galleryConfig.imagesPerView;
-    
-    container.style.transform = `translateX(-${offset}%)`;
-    
-    // Actualizar estado de los botones
-    updateCarouselButtons();
-}
-
-// Función para actualizar los botones del carrusel
-function updateCarouselButtons() {
-    const prevBtn = document.querySelector('.gallery-btn.prev');
-    const nextBtn = document.querySelector('.gallery-btn.next');
-    const totalPages = Math.ceil(galleryConfig.totalImages / galleryConfig.imagesPerView);
-    
-    if (prevBtn) {
-        prevBtn.disabled = currentIndex === 0;
-    }
-    
-    if (nextBtn) {
-        nextBtn.disabled = currentIndex === totalPages - 1;
-    }
-}
-
-// Función para actualizar los indicadores
-function updateIndicators() {
+    const container = document.getElementById('galleryContainer');
     const indicators = document.querySelectorAll('.gallery-indicator');
+
+    if (container) {
+        const translateX = -currentIndex * (100 / 14);
+        container.style.transform = `translateX(${translateX}%)`;
+        console.log(`🔄 Carrusel actualizado - Índice: ${currentIndex}, Translate: ${translateX}%`);
+    }
+
+    // Actualizar indicadores
     indicators.forEach((indicator, index) => {
         indicator.classList.toggle('active', index === currentIndex);
     });
+    
+    console.log(`📍 Indicadores activos: ${indicators.length}, Índice actual: ${currentIndex}`);
 }
 
-// Función para abrir el modal
-function openModal(imageIndex) {
-    const modal = document.querySelector('.gallery-modal');
-    const modalImage = document.querySelector('#modalImage');
+// Funciones del modal
+function openModal(index) {
+    const modal = document.getElementById('galleryModal');
+    if (!modal) return;
+
+    modalCurrentIndex = index;
+    modal.classList.add('active');
+    updateModalImage();
     
-    if (!modal || !modalImage) return;
+    // Pausar avance automático mientras el modal está abierto
+    stopAutoAdvance();
     
-    modalCurrentIndex = imageIndex;
+    console.log(`🔍 Modal abierto en imagen ${index + 1}`);
+}
+
+function closeModal() {
+    const modal = document.getElementById('galleryModal');
+    if (!modal) return;
+
+    modal.classList.remove('active');
     
-    // Actualizar imagen del modal
-    const imageNumber = imageIndex + 1;
+    // Reanudar avance automático
+    resetAutoAdvance();
+    
+    console.log('❌ Modal cerrado');
+}
+
+function updateModalImage() {
+    const modalImage = document.getElementById('modalImage');
+    if (!modalImage) return;
+
+    const imageNumber = modalCurrentIndex + 1;
     modalImage.src = `${galleryConfig.imagePath}${imageNumber}${galleryConfig.imageExtension}`;
     modalImage.alt = `Imagen de galería ${imageNumber}`;
-    
-    // Mostrar modal
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden'; // Prevenir scroll
-}
-
-// Función para cerrar el modal
-function closeModal() {
-    const modal = document.querySelector('.gallery-modal');
-    if (!modal) return;
-    
-    modal.classList.remove('active');
-    document.body.style.overflow = ''; // Restaurar scroll
-}
-
-// Función para navegar en el modal
-function navigateModal(direction) {
-    if (direction === 'next') {
-        modalCurrentIndex = (modalCurrentIndex + 1) % galleryConfig.totalImages;
-    } else {
-        modalCurrentIndex = (modalCurrentIndex - 1 + galleryConfig.totalImages) % galleryConfig.totalImages;
-    }
-    
-    // Actualizar imagen del modal
-    const modalImage = document.querySelector('#modalImage');
-    if (modalImage) {
-        const imageNumber = modalCurrentIndex + 1;
-        modalImage.src = `${galleryConfig.imagePath}${imageNumber}${galleryConfig.imageExtension}`;
-        modalImage.alt = `Imagen de galería ${imageNumber}`;
-    }
 }
 
 // Funciones de avance automático
 function startAutoAdvance() {
-    if (autoAdvanceTimer) {
-        clearInterval(autoAdvanceTimer);
-    }
+    if (autoAdvanceTimer) return;
     
     autoAdvanceTimer = setInterval(() => {
         if (!isUserInteracting) {
-            navigateCarousel('next');
+            nextImage();
         }
     }, galleryConfig.autoAdvanceInterval);
+    
+    console.log('▶️ Avance automático iniciado');
 }
 
 function stopAutoAdvance() {
     if (autoAdvanceTimer) {
         clearInterval(autoAdvanceTimer);
         autoAdvanceTimer = null;
+        console.log('⏸️ Avance automático pausado');
     }
 }
 
 function resetAutoAdvance() {
     stopAutoAdvance();
     setTimeout(() => {
-        if (!isUserInteracting) {
-            startAutoAdvance();
-        }
-    }, 1000); // Esperar 1 segundo antes de reiniciar
+        startAutoAdvance();
+    }, 2000); // Esperar 2 segundos antes de reanudar
 }
 
-// Función debounce para optimizar el rendimiento
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-// Configurar responsive behavior
-const handleResize = debounce(() => {
-    const isMobile = window.innerWidth <= 768;
-    galleryConfig.imagesPerView = isMobile ? 2 : 4;
-    
-    // Reconfigurar indicadores
-    setupIndicators();
-    
-    // Resetear índice si es necesario
-    const totalPages = Math.ceil(galleryConfig.totalImages / galleryConfig.imagesPerView);
-    if (currentIndex >= totalPages) {
-        currentIndex = totalPages - 1;
+// Detectar interacción del usuario
+document.addEventListener('mouseenter', (e) => {
+    if (e.target.closest('.gallery')) {
+        isUserInteracting = true;
     }
-    
-    updateCarousel();
-    updateIndicators();
-}, 250);
+}, true);
 
-// Escuchar cambios de tamaño de ventana
-window.addEventListener('resize', handleResize);
+document.addEventListener('mouseleave', (e) => {
+    if (e.target.closest('.gallery')) {
+        isUserInteracting = false;
+    }
+}, true);
+
+// Pausar avance automático cuando la pestaña no está visible
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        stopAutoAdvance();
+    } else {
+        resetAutoAdvance();
+    }
+});
+
+console.log('🖼️ Sistema de galería cargado');
