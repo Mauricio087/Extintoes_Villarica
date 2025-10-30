@@ -648,6 +648,7 @@ function setupModal() {
         modalPrev.addEventListener('click', () => {
             modalCurrentIndex = (modalCurrentIndex - 1 + galleryConfig.totalImages) % galleryConfig.totalImages;
             updateModalImage();
+            updateModalNavigation();
         });
     }
 
@@ -655,6 +656,7 @@ function setupModal() {
         modalNext.addEventListener('click', () => {
             modalCurrentIndex = (modalCurrentIndex + 1) % galleryConfig.totalImages;
             updateModalImage();
+            updateModalNavigation();
         });
     }
 
@@ -666,6 +668,9 @@ function setupModal() {
             }
         });
     }
+
+    // Generar indicadores del modal
+    generateModalIndicators();
 
     console.log('🖼️ Modal configurado');
 }
@@ -701,11 +706,13 @@ function setupKeyboardNavigation() {
                     e.preventDefault();
                     modalCurrentIndex = (modalCurrentIndex - 1 + galleryConfig.totalImages) % galleryConfig.totalImages;
                     updateModalImage();
+                    updateModalNavigation();
                     break;
                 case 'ArrowRight':
                     e.preventDefault();
                     modalCurrentIndex = (modalCurrentIndex + 1) % galleryConfig.totalImages;
                     updateModalImage();
+                    updateModalNavigation();
                     break;
             }
         } else {
@@ -777,6 +784,7 @@ function openModal(index) {
     modalCurrentIndex = index;
     modal.classList.add('active');
     updateModalImage();
+    updateModalNavigation();
     
     // Pausar avance automático mientras el modal está abierto
     stopAutoAdvance();
@@ -803,6 +811,50 @@ function updateModalImage() {
     const imageNumber = modalCurrentIndex + 1;
     modalImage.src = `${galleryConfig.imagePath}${imageNumber}${galleryConfig.imageExtension}`;
     modalImage.alt = `Imagen de galería ${imageNumber}`;
+}
+
+// Generar indicadores del modal
+function generateModalIndicators() {
+    const indicatorsContainer = document.getElementById('modalIndicators');
+    const totalImagesSpan = document.getElementById('modalTotalImages');
+    
+    if (!indicatorsContainer) return;
+    
+    // Actualizar el total de imágenes
+    if (totalImagesSpan) {
+        totalImagesSpan.textContent = galleryConfig.totalImages;
+    }
+    
+    // Limpiar indicadores existentes
+    indicatorsContainer.innerHTML = '';
+    
+    // Crear indicadores
+    for (let i = 0; i < galleryConfig.totalImages; i++) {
+        const indicator = document.createElement('div');
+        indicator.className = 'modal-indicator';
+        indicator.addEventListener('click', () => {
+            modalCurrentIndex = i;
+            updateModalImage();
+            updateModalNavigation();
+        });
+        indicatorsContainer.appendChild(indicator);
+    }
+}
+
+// Actualizar navegación del modal
+function updateModalNavigation() {
+    const currentIndexSpan = document.getElementById('modalCurrentIndex');
+    const indicators = document.querySelectorAll('#modalIndicators .modal-indicator');
+    
+    // Actualizar contador
+    if (currentIndexSpan) {
+        currentIndexSpan.textContent = modalCurrentIndex + 1;
+    }
+    
+    // Actualizar indicadores
+    indicators.forEach((indicator, index) => {
+        indicator.classList.toggle('active', index === modalCurrentIndex);
+    });
 }
 
 // Funciones de avance automático
