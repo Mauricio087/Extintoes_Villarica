@@ -1106,9 +1106,9 @@ section {
 .phone-link::before {
     content: '📞';
     font-size: var(--font-size-base);
-}
     transform: translateX(3px);
 }
+
 
 /* Información de contacto */
 .contact-info p {
