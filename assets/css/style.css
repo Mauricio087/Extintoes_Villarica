@@ -1966,8 +1966,8 @@ section {
 .gallery-controls {
     position: absolute;
     top: 50%;
-    left: -40px;
-    right: -40px;
+    left: 10px;
+    right: 10px;
     transform: translateY(-50%);
     display: flex;
     justify-content: space-between;
@@ -2320,8 +2320,8 @@ section {
     }
     
     .gallery-controls {
-        left: -40px;
-        right: -40px;
+        left: 5px;
+        right: 5px;
     }
     
     .gallery-btn {
@@ -2372,8 +2372,8 @@ section {
     }
     
     .gallery-controls {
-        left: -30px;
-        right: -30px;
+        left: 2px;
+        right: 2px;
     }
     
     .gallery-btn {
