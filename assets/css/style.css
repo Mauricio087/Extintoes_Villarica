@@ -840,6 +840,36 @@ section {
     margin-bottom: var(--spacing-3xl);
 }
 
+.contact-left-column,
+.contact-right-column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+    align-items: stretch;
+}
+
+.contact-left-column {
+    justify-content: flex-start;
+}
+
+.contact-right-column {
+    justify-content: flex-start;
+}
+
+/* Asegurar que las primeras cajas tengan alturas apropiadas */
+.contact-map {
+    min-height: 350px;
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-right-column > .contact-item:first-child {
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 .contact-item {
     display: flex;
     align-items: flex-start;
@@ -950,6 +980,33 @@ section {
 .social-link svg {
     width: 20px;
     height: 20px;
+}
+
+/* ===== MAPA DE UBICACIÓN ===== */
+.contact-map h3 {
+    color: var(--color-white);
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    margin-bottom: var(--spacing-lg);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.map-container {
+    margin: var(--spacing-xl) 0;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    flex-grow: 1;
+}
+
+.map-container iframe {
+    width: 100%;
+    height: 250px;
+    border: none;
+    display: block;
 }
 
 /* ===== FOOTER ===== */
@@ -1355,6 +1412,22 @@ section {
         gap: var(--spacing-xl);
     }
 
+    .contact-left-column,
+    .contact-right-column {
+        gap: var(--spacing-lg);
+    }
+
+    /* Resetear altura mínima en tablet para mejor flujo */
+    .contact-map,
+    .contact-right-column > .contact-item:first-child {
+        min-height: auto;
+    }
+
+    /* Mapa en tablet */
+    .map-container iframe {
+        height: 250px;
+    }
+
     .products-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -1640,6 +1713,15 @@ section {
         height: 20px;
     }
 
+    /* Mapa en móvil */
+    .map-container {
+        margin: var(--spacing-lg) 0;
+    }
+
+    .map-container iframe {
+        height: 200px;
+    }
+
     .logo-text {
         display: none;
     }
@@ -1698,6 +1780,11 @@ section {
     .modal-content {
         width: 95%;
         padding: var(--spacing-md);
+    }
+
+    /* Mapa en móvil pequeño */
+    .map-container iframe {
+        height: 180px;
     }
 }
 
